@@ -35,6 +35,7 @@ var city = "";
 var searchHistory = document.getElementById('search-history');
 var cityHistory = [];
 var body = document.getElementsByTagName('body');
+var savedCityBtn = document.getElementsByClassName('saved-city');
 
 function displaySearchHistory() {
   cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
@@ -83,9 +84,13 @@ function getCurrentWeather(city) {
     dateDisplay.setAttribute("style", "border:thin; border-color:black; border-style:solid;");
   })
 
-  displaySearchHistory();
+  
 
   };
+
+
+
+
 
 function saveSearch() {
   localStorage.setItem("saved-cities", JSON.stringify(cityHistory));
@@ -109,7 +114,7 @@ saveSearch();
   console.log(currentDay);  
   displayCityTime(city);
   saveSearch();
-
+  displaySearchHistory();
 
 searchBtn.addEventListener("click", function clearData() {
   dateDisplay.replaceChildren();
@@ -124,6 +129,7 @@ clearBtn.addEventListener("click",function(event) {
   event.preventDefault();
   localStorage.clear();
   searchHistory.replaceChildren();
+  cityHistory = [];
 });
 
 displaySearchHistory();
