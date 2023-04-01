@@ -32,6 +32,7 @@ var dateDisplay = document.getElementById('current-date');
 var currentDay = dayjs().format('dddd,  MMMM D, YYYY');
 var city = "";
 var searchHistory = document.getElementById('search-history');
+var cityHistory = [];
 
 
 
@@ -68,16 +69,33 @@ function getCurrentWeather(city) {
   })
   };
 
+function saveSearch() {
+  localStorage.setItem("saved-cities", JSON.stringify(cityHistory));
+};
 
 userFormEl.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  var city = cityInputEl.value;
+  var city = cityInputEl.value.trim();
+  if(city){
+    getCurrentWeather(city);
+    // get5Day(city);
+    cityHistory.unshift({city});
+    cityInputEl.value = "";
+} else{
+    alert("Please enter a City");
+}
+saveSearch();
   console.log(city);
-  document.getElementById('city').value = "";
+  // document.getElementById('city').value = "";
   console.log(currentDay);  
   displayCityTime(city);
-  getCurrentWeather(city);
+  saveSearch();
+
+
+searchBtn.addEventListener("click", function clearData() {
+  dateDisplay.replaceChildren();
+});
 
 
 });
