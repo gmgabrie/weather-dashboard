@@ -21,30 +21,43 @@
 // ** END PSEUDO CODE ** //
 
 var cityInputEl = document.getElementById('city');
+var userFormEl = document.getElementById('city-search');
 var searchBtn = document.getElementById('search-btn');
 var apiKey = '18a7fc6d811ac42bd255ac1011ced4fd';
 var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
 var oneCallApiUrl = 'https://api.openweathermap.org/data/3.0/onecall?lat=';
+var iconUrl = 'https://openweathermap.org/img/w/'
 var weatherDisplay = document.getElementById('weather-data');
 var dateDisplay = document.getElementById('current-date');
 var currentDay = dayjs().format('dddd,  MMMM D, YYYY');
 var city = "";
+var searchHistory = document.getElementById('search-history');
 
 
-function displayCityTime() {
+
+function displayCityTime(city) {
   dateDisplay.append('  ' + city + '    -    ' + currentDay);
 };
 
-function getCurrentWeather() {
+function getCurrentWeather(city) {
   fetch(weatherApiUrl + city + '&apiKey=' + apiKey + '&units=imperial')
   .then(function (response) {
     return response.json();
+
+
   })
   .then(function (data) {
     console.log(data);
+    var iconCode = data.weather[0].icon;
+    var iconUrl = 'https://openweathermap.org/img/w/' + iconCode + '.png';
+    var h2Break = document.createElement('br');
+    var icon1 = document.createElement('img');
     var listItem1 = document.createElement('li');
     var listItem2 = document.createElement('li');
     var listItem3 = document.createElement('li');
+    dateDisplay.appendChild(h2Break);
+    icon1.setAttribute("src", iconUrl);
+    dateDisplay.appendChild(icon1);
     listItem1.textContent = 'Temp: ' + data.main.temp + ' F';
     dateDisplay.appendChild(listItem1);
     listItem2.textContent = 'Wind: ' + data.wind.speed + ' MPH';
@@ -56,14 +69,16 @@ function getCurrentWeather() {
   };
 
 
-searchBtn.addEventListener("click", function(event) {
+userFormEl.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  city = cityInputEl.value;
+  var city = cityInputEl.value;
   console.log(city);
   document.getElementById('city').value = "";
   console.log(currentDay);  
-  displayCityTime();
-  getCurrentWeather();
+  displayCityTime(city);
+  getCurrentWeather(city);
+
 
 });
+
