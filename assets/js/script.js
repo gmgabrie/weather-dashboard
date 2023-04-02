@@ -24,9 +24,14 @@ var cityInputEl = document.getElementById('city');
 var userFormEl = document.getElementById('city-search');
 var searchBtn = document.getElementById('search-btn');
 var clearBtn = document.getElementById('clear-btn');
+
 var apiKey = '18a7fc6d811ac42bd255ac1011ced4fd';
-var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
+
+var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/forecast?';
+// var weatherApiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
+
 var oneCallApiUrl = 'https://api.openweathermap.org/data/3.0/onecall?lat=';
+
 var iconUrl = 'https://openweathermap.org/img/w/'
 var weatherDisplay = document.getElementById('weather-data');
 var dateDisplay = document.getElementById('current-date');
@@ -36,6 +41,9 @@ var searchHistory = document.getElementById('search-history');
 var cityHistory = [];
 var body = document.getElementsByTagName('body');
 var savedCityBtn = document.getElementById('search-history');
+var cityLat = "";
+var cityLon = "";
+var fiveDayHeader = document.getElementById('five-day');
 
 function displaySearchHistory() {
   cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
@@ -54,19 +62,23 @@ function displaySearchHistory() {
 }
 
 function displayCityTime(city) {
-  dateDisplay.append(city + '-' + currentDay);
+  dateDisplay.append(city + ' - ' + currentDay);
 };
 
 function getCurrentWeather(city) {
-  fetch(weatherApiUrl + city + '&apiKey=' + apiKey + '&units=imperial')
+  fetch(weatherApiUrl + 'appid=' + apiKey + '&units=imperial&q=' + city)
+  // fetch(weatherApiUrl + city + '&apiKey=' + apiKey + '&units=imperial')
+
   .then(function (response) {
     return response.json();
 
-
   })
+
   .then(function (data) {
     console.log(data);
-    var iconCode = data.weather[0].icon;
+    // cityLat = data.coord.lat;
+    // cityLon = data.coord.lon;
+    var iconCode = data.list[0].weather[0].icon;
     var iconUrl = 'https://openweathermap.org/img/w/' + iconCode + '.png';
     var h2Break = document.createElement('br');
     var icon1 = document.createElement('img');
@@ -76,21 +88,26 @@ function getCurrentWeather(city) {
     dateDisplay.appendChild(h2Break);
     icon1.setAttribute("src", iconUrl);
     dateDisplay.appendChild(icon1);
-    listItem1.textContent = 'Temp: ' + data.main.temp + ' F';
+    listItem1.textContent = 'Temp: ' + data.list[0].main.temp + ' F';
     dateDisplay.appendChild(listItem1);
-    listItem2.textContent = 'Wind: ' + data.wind.speed + ' MPH';
+    listItem2.textContent = 'Wind: ' + data.list[0].wind.speed + ' MPH';
     dateDisplay.appendChild(listItem2);
-    listItem3.textContent = 'Humidity: ' + data.main.humidity + ' %';
+    listItem3.textContent = 'Humidity: ' + data.list[0].main.humidity + ' %';
     dateDisplay.appendChild(listItem3);
     dateDisplay.setAttribute("style", "border:thin; border-color:black; border-style:solid;");
+
+    // 5-day forecast
+    // fetch(weatherApiUrl + city + '&apiKey=' + apiKey + '&units=imperial')
+    // .then(function (response) {
+    //   return response.json();
+
   })
+
+    fiveDayHeader.append('5-Day Forecast');
 
   
 
   };
-
-
-
 
 
 function saveSearch() {
@@ -119,6 +136,7 @@ saveSearch();
 
 searchBtn.addEventListener("click", function clearData() {
   dateDisplay.replaceChildren();
+  fiveDayHeader.replaceChildren();
 });
 
 
