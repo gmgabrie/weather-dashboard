@@ -35,7 +35,7 @@ var city = "";
 var searchHistory = document.getElementById('search-history');
 var cityHistory = [];
 var body = document.getElementsByTagName('body');
-var savedCityBtn = document.getElementsByClassName('saved-city');
+var savedCityBtn = document.getElementById('search-history');
 
 function displaySearchHistory() {
   cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
@@ -46,6 +46,7 @@ function displaySearchHistory() {
       var savedCityBtn = document.createElement("button");
       savedCityBtn.classList.add("btn", "btn-primary", "my-2", "saved-city");
       savedCityBtn.setAttribute("style", "width: 100%");
+      savedCityBtn.setAttribute('attr', cityHistory[i].city);
       savedCityBtn.textContent = `${cityHistory[i].city}`;
       searchHistory.appendChild(savedCityBtn);
   }
@@ -53,7 +54,7 @@ function displaySearchHistory() {
 }
 
 function displayCityTime(city) {
-  dateDisplay.append('  ' + city + '    -    ' + currentDay);
+  dateDisplay.append(city + '-' + currentDay);
 };
 
 function getCurrentWeather(city) {
@@ -131,6 +132,17 @@ clearBtn.addEventListener("click",function(event) {
   searchHistory.replaceChildren();
   cityHistory = [];
 });
+
+savedCityBtn.addEventListener("click",function(e) {
+  // event.preventDefault();
+  var savedCityButton = document.getElementsByClassName('saved-city');
+  city = e.target.textContent;
+  console.log(city);
+  dateDisplay.replaceChildren();
+  displayCityTime(city);
+  getCurrentWeather(city);
+});
+
 
 displaySearchHistory();
 
