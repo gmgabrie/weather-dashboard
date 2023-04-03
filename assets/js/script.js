@@ -73,14 +73,19 @@ function getCoordinates(city) {
     console.log(cityLat);
     console.log(cityLon);
     var cityInfo = {
-      city: city,
-      lat: data.coord.lat,
-      lon: data.coord.lon
+      city: city
+      // lat: data.coord.lat,
+      // lon: data.coord.lon
     }
 
+console.log(cityHistory);
+cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
+
+    if (cityHistory.includes(city) === false) {
     cityHistory.push(cityInfo);
     localStorage.setItem("saved-cities", JSON.stringify(cityHistory));
     return cityInfo;
+    }
 
 
 })
@@ -113,6 +118,7 @@ function getCurrentWeather(data) {
     var listItem3 = document.createElement('li');
     dateDisplay.appendChild(h2Break);
     icon1.setAttribute("src", iconUrl + iconCode + '.png');
+    icon1.setAttribute("style", "margin-left: 15px");
     dateDisplay.appendChild(icon1);
     listItem1.textContent = 'Temp: ' + data.current.temp + ' F';
     dateDisplay.appendChild(listItem1);
@@ -121,10 +127,10 @@ function getCurrentWeather(data) {
     listItem3.textContent = 'Humidity: ' + data.current.humidity + ' %';
     dateDisplay.appendChild(listItem3);
     dateDisplay.setAttribute("style", "border:thin; border-color:black; border-style:solid;");
+    forecastArea.setAttribute("style", "visibility:visible");
 
     for (var i=1; i < 6; i++) {
 
-      // display the date
       var dateElement = forecastArea.querySelector("#card-date" + i);
       var unixDate = data.daily[i].dt;
       dateElement.textContent = dayjs.unix(unixDate).format("MM/DD/YYYY");
@@ -140,16 +146,17 @@ function getCurrentWeather(data) {
       var humidityElement = forecastArea.querySelector("#card-humidity" + i);
       var forecastHumidity = data.daily[i].humidity;
       humidityElement.textContent = 'Humidity: ' + forecastHumidity + ' %';
-    }
-  })
+
+    };
+
+    fiveDayHeader.append('5-Day Forecast');
+  }
+  )}
 
   
 
-    fiveDayHeader.append('5-Day Forecast');
 
-    
 
-  };
 
 function getForecast(city) {
     fetch(forecastApiUrl + apiKey + '&units=imperial&q=' + city)
