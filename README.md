@@ -1,5 +1,5 @@
-# weather-dashboard
-Weather Dashboard application using OpenWeatherMap API.
+# weather-wizard
+Weather dashboard application using OpenWeatherMap API.
 
 ## Description
 
@@ -11,7 +11,7 @@ The user can type the name of a city in the search box and after clicking the se
 
 ## Application link:
 
-https://gmgabrie.github.io/weather-dashboard/
+https://gmgabrie.github.io/weather-wizard/
 
 ![dashboard screenshot](./assets/images/weather_screenshot.png)
 
