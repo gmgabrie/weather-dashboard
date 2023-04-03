@@ -1,25 +1,4 @@
-// ** START PSEUDO CODE ** //
-
-// when user searches for a city (clicks search button):
-//  - store the user input in a variable
-//  - use a fetch api to get the current & future conditions for that city
-//  - store that city into local storage
-// use the data from fetch to populate in the current-weather container:
-//  - name and today's date as M/DD/YYY
-//  - temp
-//  - wind
-//  - humidity
-// use the data from fetch to populate in the five-day container:
-//  - date
-//  - an icon reprsentation of weather conditions
-//  - the temp
-//  - wind speed
-//  - humidity
-// use data in local.storage to create a button under the <hr> in search area for city history
-//  - when you click the button it displays the current and future conditions for that city
-
-// ** END PSEUDO CODE ** //
-
+// global variables
 var cityInputEl = document.getElementById('city');
 var userFormEl = document.getElementById('city-search');
 var searchBtn = document.getElementById('search-btn');
@@ -41,6 +20,7 @@ var cityLon = "";
 var fiveDayHeader = document.getElementById('five-day');
 var forecastArea = document.getElementById('forecast-container');
 
+// function to display buttons for previously search cities
 function displaySearchHistory() {
   cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
   searchHistory.innerHTML ='';
@@ -57,25 +37,22 @@ function displaySearchHistory() {
   return;
 }
 
+// function to display city name and time
 function displayCityTime(city) {
   dateDisplay.append(city + ' - ' + currentDay);
 };
 
+// function to get coordinates of searched city from OpenWeatherMap API
 function getCoordinates(city) {
   fetch(weatherApiUrl + city +'&appid=' + apiKey)
   .then(function (response) {
     return response.json();
   })
   .then(function (data) {
-    console.log(data);
     cityLat = data.coord.lat;
     cityLon = data.coord.lon;
-    console.log(cityLat);
-    console.log(cityLon);
     var cityInfo = {
       city: city
-      // lat: data.coord.lat,
-      // lon: data.coord.lon
     }
 
 console.log(cityHistory);
@@ -99,7 +76,7 @@ return;
 }
 
 
-
+// function to get current and future weather from API
 function getCurrentWeather(data) {
   fetch(newWeatherApiUrl + cityLat + '&lon=' + cityLon + '&exclude=minutely,hourly&units=imperial&apiKey=' + apiKey)
 
@@ -149,36 +126,12 @@ function getCurrentWeather(data) {
 
     };
 
+    // append the 5-day forecast header
     fiveDayHeader.append('5-Day Forecast');
   }
   )}
 
-  
-
-
-
-
-function getForecast(city) {
-    fetch(forecastApiUrl + apiKey + '&units=imperial&q=' + city)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-      for (var i=1; i < 6; i++) {
-
-        // display the date
-        var dateElement = forecastArea.querySelector("#card-date" + i);
-        var unixDate = data.list[i].dt;
-        dateElement.textContent = dayjs.unix(unixDate).format("MM/DD/YYYY");
-        var iconElement = forecastArea.querySelector("#img" + i);
-        var forecastIcon = data.list[i].weather[0].icon;
-        iconElement.setAttribute("src", iconUrl + forecastIcon + '.png');
-      }
-    })
-  };
-
-
+// event listener for search button
 userFormEl.addEventListener("submit", function(event) {
   event.preventDefault();
 
@@ -192,7 +145,7 @@ userFormEl.addEventListener("submit", function(event) {
 
   displayCityTime(city);
 
-
+// event listener to clear any weather data displayed when new search is performed
 searchBtn.addEventListener("click", function clearData() {
   dateDisplay.replaceChildren();
   fiveDayHeader.replaceChildren();
@@ -210,12 +163,11 @@ clearBtn.addEventListener("click",function(event) {
   cityHistory = [];
 });
 
+// event listener for saved city buttons
 savedCityBtn.addEventListener("click",function(e) {
   var savedCityButton = document.getElementsByClassName('saved-city');
   cityHistory = JSON.parse(localStorage.getItem("saved-cities")) || [];
-  console.log(cityHistory);
   city = e.target.textContent;
-  console.log(city);
   dateDisplay.replaceChildren();
   fiveDayHeader.replaceChildren();
   displayCityTime(city);

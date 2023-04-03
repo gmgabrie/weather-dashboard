@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link to google fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-    <title>Weather Dashboard</title>
+    <title>Weather Wizard</title>
 </head>
 
-<header class="header">Weather Dashboard</header>
+<header class="header">Weather Wizard</header>
 
 <main id='container' class="container">
       <!-- search city area -->
@@ -20,19 +21,18 @@
                       class='city-input' />
                   <button type="submit" id='search-btn' class='btn'>Search</button>
               </form>
-<hr>
+            <hr>
               <button type="submit" id='clear-btn' class='btn'>Clear History</button>
-<br>
               <!-- div that holds cities already searched in local storage -->
               <div id="search-history"></div>
           </div>
 
-      <!-- container that holds the current weather and 5 day forecast -->
+    <!-- container that holds the current weather and 5 day forecast -->
       <div id="weather-data">
         <h2 id="current-date"></h2>
-          <div id='current-conditions' class='row spacebetween'></div>
+          <div id='current-conditions'></div>
         <h2 id="five-day"></h2>
-        <div id="forecast-container" class="row spacebetween">
+        <div id="forecast-container">
             <div id="card1" class="card">
                 <h4 id="card-date1"></h4>
                 <img id="img1" src="" alt="">
@@ -68,7 +68,6 @@
                 <p id="card-wind5"></p>
                 <p id="card-humidity5"></p>
             </div>
-            
         </div>
 </main>
 </body>
